@@ -1,4 +1,4 @@
-## Symbolic Model Checking of Signal Temporal Logic Properties Using Syntactic Separation 
+## stlMC: Signal Temporal Logic Model Checker
 
 Running these scripts requires the following libraries:
 
@@ -12,5 +12,5 @@ python3 example.py
 
 The following document includes the explanation of the tool and benchmark models
 
-- [artifactDocument.pdf](artifactDocument.pdf)
+- [readme.pdf](readme.pdf)
 
