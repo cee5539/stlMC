@@ -1,16 +1,13 @@
-## Symbolic Model Checking of Signal Temporal Logic Properties Using Syntactic Separation 
+## Bounded Model Checking of Signal Temporal Logic Properties Using Syntactic Separation
 
-Running these scripts requires the following libraries:
+This branch contains resources for our paper “Bounded Model Checking of Signal Temporal Logic Properties Using Syntactic Separation”
 
-1. [Z3 Python api](https://github.com/Z3Prover/z3)
-2. [ANTLR](http://www.antlr.org/) for Python 3
+- The following document includes the explanation of the tool and benchmark models
 
-Simple example can be executed using the following command
-~~~
-python3 example.py
-~~~
+  * [artifactDocument.pdf](artifactDocument.pdf)
 
-The following document includes the explanation of the tool and benchmark models
+- Running these scripts requires the following libraries:
 
-- [artifactDocument.pdf](artifactDocument.pdf)
+  1. [Z3 Python api](https://github.com/Z3Prover/z3)
+  2. [ANTLR](http://www.antlr.org/) for Python 3
 
