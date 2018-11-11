@@ -54,4 +54,3 @@ if __name__ == '__main__':
                 print("k,ConstraintSize,TranslationSize,Result,generationTime,solvingTime, totalTime", file=fle)
             p = multiprocessing.Process(target = reportSatisfiable, args=(model, stlFormulas[i], bound, step, tmax, rel_path))
             p.start()
-
