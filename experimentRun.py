@@ -30,14 +30,14 @@ if __name__ == '__main__':
     model1  = (M1.ThermostatPoly(),   21, 60, 4, M1.testcaseSTL,  M1.goal)
     model2  = (M2.WatertankPoly(),    21, 60, 4, M2.testcaseSTL,  M2.goal)
     model3  = (M3.CarPoly(),          21, 60, 4, M3.testcaseSTL,  M3.goal)
-    model4  = (M4.RailroadPoly(),     21, 60, 4, M4.testcaseSTL,  M4.goal)
-    model5  = (M5.BatteryPoly(),      21, 60, 4, M5.testcaseSTL,  M5.goal)
+    model4  = (M4.RailroadPoly(),     21, 10, 4, M4.testcaseSTL,  M4.goal)
+    model5  = (M5.BatteryPoly(),      21, 30, 4, M5.testcaseSTL,  M5.goal)
 
-    model6  = (M6.ThermostatLinear(), 51, 60, 10, M6.testcaseSTL,  M6.goal)
-    model7  = (M7.WatertankLinear(),  51, 60, 10, M7.testcaseSTL,  M7.goal)
-    model8  = (M8.CarLinear(),        51, 60, 10, M8.testcaseSTL,  M8.goal)
-    model9  = (M9.RailroadLinear(),   51, 60, 10, M9.testcaseSTL,  M9.goal)
-    model10 = (M10.BatteryLinear(),   51, 60, 10, M10.testcaseSTL, M10.goal)
+    model6  = (M6.ThermostatLinear(), 51, 100, 10, M6.testcaseSTL,  M6.goal)
+    model7  = (M7.WatertankLinear(),  51, 100, 10, M7.testcaseSTL,  M7.goal)
+    model8  = (M8.CarLinear(),        51,  60, 10, M8.testcaseSTL,  M8.goal)
+    model9  = (M9.RailroadLinear(),   51,  10, 10, M9.testcaseSTL,  M9.goal)
+    model10 = (M10.BatteryLinear(),   51,  30, 10, M10.testcaseSTL, M10.goal)
 
     configs = [model1, model2, model3, model4, model5, model6, model7, model8, model9, model10]
 
