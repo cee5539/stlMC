@@ -4,7 +4,7 @@ This branch contains resources for our paper “Bounded Model Checking of Signal
 
 - The following document includes the explanation of the tool and benchmark models
 
-  * [artifactDocument.pdf](artifactDocument.pdf)
+  * [readme.pdf](readme.pdf)
 
 - Running these scripts requires the following libraries:
 
