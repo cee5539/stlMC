@@ -37,7 +37,7 @@ if __name__ == '__main__':
     
     # model checking runs
     for (model, bound, tmax, step, stlFormulas, reachGoal) in configs:        
-        for i in range(len(stlFormulas)):
+        for i in [2]: 
             filename = str(type(model).__name__) + "f_" + str(i) + ".csv"
             rel_path = str(os.path.abspath(os.curdir)) + "/data/" + filename 
             with open(rel_path, 'w') as fle:
