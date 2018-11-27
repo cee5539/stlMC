@@ -69,7 +69,6 @@ class Model:
                 return (False, constSize, fsSize, str(etime1-stime1), str(stime2-etime1), str(stime2-stime1))  # counterexample found
             if  result == z3.unknown:
                 isUnknown = True
-            print(result)
 
         return ("Unknown" if isUnknown else True, constSize, fsSize, str(etime1-stime1), str(stime2-etime1), str(stime2-stime1))
 
