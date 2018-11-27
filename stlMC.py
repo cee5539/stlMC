@@ -109,10 +109,7 @@ class Model:
 
         result.append(self.afterFlow(Real('time' + str(bound)), bound))
 
-        if bound == 0:
-            ts = [Real("tau_0")]
-        else:
-            ts = [Real("tau_%s"%i) for i in range(bound+1)]
+        ts = [Real("tau_%s"%i) for i in range(0, bound+1)]
 
         result.append(ts[0] >= RealVal(0))
         result.append(Real('time0') == ts[0])

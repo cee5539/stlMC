@@ -1,4 +1,3 @@
-
 from antlr4 import *
 from .syntax.stlLexer import stlLexer
 from .syntax.stlParser import stlParser
