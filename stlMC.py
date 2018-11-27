@@ -67,15 +67,10 @@ class Model:
 
             if  result == z3.sat:
                 return (False, constSize, fsSize, str(etime1-stime1), str(stime2-etime1), str(stime2-stime1))  # counterexample found
-            if  result != z3.unsat:
+            if  result == z3.unknown:
                 isUnknown = True
 
-        returnValue = True
-
-        if isUnknown  == True:
-            returnValue = "Unknown"
-                       
-        return (returnValue, constSize, fsSize, str(etime1-stime1), str(stime2-etime1), str(stime2-stime1))
+        return ("Unknown" if isUnknown else True, constSize, fsSize, str(etime1-stime1), str(stime2-etime1), str(stime2-stime1))
 
 
     def reach(self, bound, goal):
