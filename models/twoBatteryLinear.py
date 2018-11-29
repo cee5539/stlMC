@@ -67,17 +67,17 @@ class BatteryLinear(Model):
 
         jump = {\
                 And(g1 > (RealVal(1) - C) * d1, g2 > (RealVal(1) - C) * d2): \
-                And(And(Not(mfNext), Not(msNext), mtNext), d1Next == (d1 - K * g1), g1Next == g1, d2Next == (d2 - K * g2), g2Next == g2), \
+                And(And(Not(mfNext), Not(msNext), mtNext), d1Next == d1, g1Next == g1, d2Next == d2, g2Next == g2), \
                 And(g1 > (RealVal(1) - C) * d1, g2 > (RealVal(1) - C) * d2): \
-                And(And(Not(mfNext), msNext, Not(mtNext)), d1Next == (d1 - K * g1), g1Next == g1, d2Next == (d2 - K * g2), g2Next == g2), \
+                And(And(Not(mfNext), msNext, Not(mtNext)), d1Next == d1, g1Next == g1, d2Next == d2, g2Next == g2), \
                 And(g1 > (RealVal(1) - C) * d1, g2 > (RealVal(1) - C) * d2): \
-                And(And(Not(mfNext), msNext, mtNext), d1Next == (d1 - K * g1), g1Next == g1, d2Next == (d2 - K * g2), g2Next == g2), \
+                And(And(Not(mfNext), msNext, mtNext), d1Next == d1, g1Next == g1, d2Next == d2, g2Next == g2), \
                 And(g1 <= (RealVal(1) - C) * d1, g2 > (RealVal(1) - C) * d2): \
-                And(And(Not(mfNext), msNext, mtNext), d1Next == (d1 - K * g1), g1Next == g1, d2Next == (d2 - K * g2), g2Next == g2), \
+                And(And(Not(mfNext), msNext, mtNext), d1Next == d1, g1Next == g1, d2Next == d2, g2Next == g2), \
                 And(g1 > (RealVal(1) - C) * d1, g2 <= (RealVal(1) - C) * d2): \
-                And(And(mfNext, Not(msNext), Not(mtNext)), d1Next == (d1 - K * g1), g1Next == g1, d2Next == (d2 - K * g2), g2Next == g2), \
+                And(And(mfNext, Not(msNext), Not(mtNext)), d1Next == d1, g1Next == g1, d2Next == d2, g2Next == g2), \
                 And(g1 <= (RealVal(1) - C) * d1, g2 <= (RealVal(1) - C) * d2): \
-                And(And(mfNext, Not(msNext), mtNext), d1Next == (d1 - K * g1), g1Next == g1, d2Next == (d2 - K * g2), g2Next == g2)}
+                And(And(mfNext, Not(msNext), mtNext), d1Next == d1, g1Next == g1, d2Next == d2, g2Next == g2)}
 
 
         # STL propositions
