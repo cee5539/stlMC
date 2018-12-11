@@ -10,12 +10,12 @@ from stlMC import *
 goal = ((Real('x2') - Real('x1')) >= RealVal(4))
 
 # some constants 
-V1Fast = RealVal(70)
-V1Slow = RealVal(33)
-V1Keep = RealVal(33)
+V1Fast = RealVal(65)
+V1Slow = RealVal(25)
+V1Keep = RealVal(30)
 V2Fast = RealVal(60)
-V2Slow = RealVal(40)
-V2Keep = RealVal(35)
+V2Slow = RealVal(35)
+V2Keep = RealVal(40)
 
 class CarLinear(Model):
     def __init__(self):

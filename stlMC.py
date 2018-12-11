@@ -23,10 +23,7 @@ class Model:
         self.logic = logic
 
         self.flowDict = self.defineFlowDict()
-        prevarList = list(self.variables.keys())
-
-        self.varList = sorted(prevarList, key = lambda x : str(x))
-
+        self.varList = sorted(list(self.variables.keys()), key = lambda x : str(x))
 
     # an implementation of Algorithm 1 in the paper
     def modelCheck(self, stlFormula, bound, timeBound, iterative=True):
@@ -75,10 +72,9 @@ class Model:
 
     def reach(self, bound, goal):
         consts = []
-        consts.append(self.init.substitution(self.combineDict(self.makeSubMode(0), self.makeSubVars(0, 0))))
-        consts.extend([self.beforeFlow(Real('time' + str(i)), i) for i in range(bound)])
-        consts.append(self.afterFlow(Real('time' + str(bound)), bound))
-        consts.append(goal.substitution(self.combineDict(self.makeSubMode(bound), self.makeSubVars(bound, 1))))
+        consts.append(self.init.substitution(self.combineDict(self.makeSubProp(0), self.makeSubVars(0, '0'))))
+        consts.append(self.flowConstraints(bound))
+        consts.append(goal.substitution(self.combineDict(self.makeSubProp(bound), self.makeSubVars(bound, 't'))))
         return checkSat(consts)
 
 
@@ -101,13 +97,10 @@ class Model:
 
     def modelConstraints(self, bound, timeBound, partition, partitionConsts, formula):
         result = []
-        combine = self.combineDict(self.makeSubMode(0), self.makeSubVars(0, 0))
+        combine = self.combineDict(self.makeSubProp(0), self.makeSubVars(0, '0'))
         result.append(self.init.substitution(combine))
-
-        for i in range(bound):
-            result.append(self.beforeFlow(Real('time' + str(i)), i))
-
-        result.append(self.afterFlow(Real('time' + str(bound)), bound))
+       
+        result.append(self.flowConstraints(bound))
 
         ts = [Real("tau_%s"%i) for i in range(0, bound+1)]
 
@@ -139,7 +132,6 @@ class Model:
             result[i] = dict2[i]
         return result
 
-
     def makeSubMode(self, k):
         op = {Type.Bool: Bool, Type.Real: Real, Type.Int: Int}
         subDict = {}
@@ -147,17 +139,20 @@ class Model:
             subDict[str(i.id)] = op[i.getType()](str(i.id) + '_' + str(k))
         return subDict
 
+    #Substitution proposition according to bound k: {'fonepo' : fonepo_k} 
+    def makeSubProp(self, k):
+        op = {Type.Bool: Bool, Type.Real: Real, Type.Int: Int}
+        subDict = {}
+        for i in self.prop.keys():
+            subDict[str(i.id)] = op[i.getType()](str(i.id) + '_' + str(k))
+        return subDict
 
+    #Substituion varialbes according to bound k, sOe: var_k_0 or var_k_t
     def makeSubVars(self, k, sOe):
         op = {Type.Bool: Bool, Type.Real: Real, Type.Int: Int}
         subDict = {}
         for i in range(len(self.varList)):
-            if sOe == 0:
-                subDict[str(self.varList[i].id)] = op[self.varList[i].getType()](str(self.varList[i].id) + '_' + str(k) + '_0')
-            elif sOe == 1:
-                subDict[str(self.varList[i].id)] = op[self.varList[i].getType()](str(self.varList[i].id) + '_' + str(k) + '_t')
-            else:
-                pass
+            subDict[str(self.varList[i].id)] = op[self.varList[i].getType()](str(self.varList[i].id) + '_' + str(k) + '_' + sOe)
         return subDict
 
 
@@ -174,32 +169,33 @@ class Model:
                 return self.flowDict[i][0]
         return -1
         
+
+    def flowConstraints(self, bound):
+        combineJump = []
+        flowConsts = []
+        for k in range(bound):
+            time = Real('time' + str(k))
+            combineSub = self.combineDict(self.makeSubProp(k), self.makeSubVars(k, 't'))
+            nextSub = self.combineDict(self.makeSubProp(k+1), self.makeSubVars(k+1, '0'))
+            const = [And(i.substitution(combineSub), self.jump[i].substitution(combineSub)) for i in self.jump.keys()]
+            result = [i.nextSub(nextSub) for i in const]
+            combineJump.append(Or(*result))
+            flowConsts.append(Or(*([And(i.substitution(self.makeSubProp(k)), Integral(self.makeSubVars(k, 't'), self.makeSubVars(k, '0'), time, i.children[1], self.flowDictionary(self.flow[i])), Forall(self.flowDictionary(self.flow[i]), time, self.inv[i], self.makeSubVars(k, '0'), self.makeSubVars(k, 't'), self.makeSubProp(k))) for i in self.flow.keys()])))
+
+        k = bound
+        time = Real('time' + str(bound))
+        flowConsts.append(Or(*([And(i.substitution(self.makeSubProp(k)), Integral(self.makeSubVars(k, 't'), self.makeSubVars(k, '0'), time, i.children[1], self.flowDictionary(self.flow[i])), Forall(self.flowDictionary(self.flow[i]), time, self.inv[i], self.makeSubVars(k, '0'), self.makeSubVars(k, 't'), self.makeSubProp(k))) for i in self.flow.keys()])))
+
+        return And(And(*combineJump), And(*flowConsts))
+
     
-    def beforeFlow(self, time, k):
-        combineSub = self.combineDict(self.makeSubMode(k), self.makeSubVars(k, 1))
-        nextSub = self.combineDict(self.makeSubMode(k+1), self.makeSubVars(k+1, 0))
-        const = [And(i.substitution(combineSub), self.jump[i].substitution(combineSub)) for i in self.jump.keys()]
-        result = [i.nextSub(nextSub) for i in const]
-        result = Or(*result)
-        const = [And(i.substitution(self.makeSubMode(k)), Integral(self.makeSubVars(k, 1), self.makeSubVars(k,0), time, i.children[1], self.flowDictionary(self.flow[i])), Forall(self.flowDictionary(self.flow[i]), time, self.inv[i], self.makeSubVars(k, 0), self.makeSubVars(k, 1), self.makeSubMode(k))) for i in self.flow.keys()]
-        constresult = []
-        for i in const:
-            constresult.append(And(i, result))
-        return Or(*constresult)
-
-
-    def afterFlow(self, time, k):
-        const = [And(i.substitution(self.makeSubMode(k)), Integral(self.makeSubVars(k, 1), self.makeSubVars(k,0), time, i.children[1], self.flowDictionary(self.flow[i])), Forall(self.flowDictionary(self.flow[i]), time, self.inv[i], self.makeSubVars(k, 0), self.makeSubVars(k, 1), self.makeSubMode(k))) for i in self.flow.keys()]
-        return Or(*const)
-
-
     def propConstraint(self, time, k, propSet):
         const = []
         for i in self.prop.keys():
             if str(i) in propSet:
                 for j in self.flow.keys():
-                    const.append(Implies(And(i, j).substitution(self.makeSubMode(k)), Forall(self.flowDictionary(self.flow[j]), time, self.prop[i], self.makeSubVars(k, 0), self.makeSubVars(k, 1), self.makeSubMode(k))))
-                    const.append(Implies(And(Not(i), j).substitution(self.makeSubMode(k)), Forall(self.flowDictionary(self.flow[j]), time, Not(self.prop[i]), self.makeSubVars(k, 0), self.makeSubVars(k, 1), self.makeSubMode(k))))
+                    const.append(Implies(And(i, j).substitution(self.makeSubProp(k)), Forall(self.flowDictionary(self.flow[j]), time, self.prop[i], self.makeSubVars(k, '0'), self.makeSubVars(k, 't'), self.makeSubProp(k))))
+                    const.append(Implies(And(Not(i), j).substitution(self.makeSubProp(k)), Forall(self.flowDictionary(self.flow[j]), time, Not(self.prop[i]), self.makeSubVars(k, '0'), self.makeSubVars(k, 't'), self.makeSubProp(k))))
         return const
   
 

@@ -94,7 +94,8 @@ class SingleCar(Model):
         # STL propositions
         propLeft = Bool('propleft')
         propRight = Bool('propright')
-        prop = {propLeft: v < RealVal(180), propRight: phi < RealVal(60)}
+        propTemp = Bool('propTemp')
+        prop = {propTemp: mf, propLeft: v < RealVal(180), propRight: phi < RealVal(60)}
 
         super().__init__(vars, init, flow, inv, jump, prop)
 
@@ -103,15 +104,18 @@ if __name__ == '__main__':
     model = SingleCar()
 
     # STL model checking 
-    formula = "[][0.0,60.0] (propleft /\ propright)"
+#    formula = "[][0.0,60.0] (propleft /\ propright)"
+    formula = "<>[0.0, 60.0] proTemp"
     print("model checking: " + str(formula))
     (result, cSize, fsSize, gTime, sTime, tTime)  = model.modelCheck(formula, 2, 60)
     print("    result: %s (constration size = %d, translation size = %d)" % (str(result), cSize, fsSize))
 
+
     # reachability analysis
-    goal  = And(Real('x') == RealVal(50), Real('y') == RealVal(100))
+#    goal  = And(Real('x') == RealVal(50), Real('y') == RealVal(100))
+    goal = Not(Bool('mf'))
     print("reachability checking: " + str(goal))
-    result = model.reach(2, goal)
+    result = model.reach(10, goal)
     print("    result: %s (constration size = %d)" % result)
 
 

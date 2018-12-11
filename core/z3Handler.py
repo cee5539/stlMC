@@ -14,10 +14,12 @@ def checkSat(consts, logic="None"):
         solver = z3.SolverFor(logic)
     else:
         solver = z3.Solver()
-
+    
     target_z3_simplify = z3.simplify(z3.And(*z3Consts))
     solver.add(target_z3_simplify)
     solver.set("timeout", 9000000)  #timeout : 150 min
+    with open("thermoLinear.smt2", 'w') as fle:
+        print(solver.to_smt2(), file=fle)
     return (solver.check(), sizeAst(z3.And(*z3Consts)))
 
 # return the size of the Z3 constraint

@@ -39,7 +39,7 @@ class RailroadPoly(Model):
         init = And(And(Not(mf), Not(ms)), bx >= RealVal(0), bx < RealVal(1), tx >= RealVal(60), tx <= RealVal(70), vx <= RealVal(0.1), vx >= RealVal(0), constvx == vx)
 
         # set the interval bound to the variables
-        vars = {tx: (-20, 100), bx: (0, 90)}
+        vars = {tx: (-20, 100), bx: (0, 90), vx: (-50, 50)}
         # invariant conditions
         inv = {\
                And(Not(mf), Not(ms)): \

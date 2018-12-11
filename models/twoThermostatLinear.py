@@ -6,8 +6,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from .thermostatSTL import testcaseSTL
 
 # reachability goal
-goal = Real('fx') > RealVal(21)
-
+#goal = Real('fx') > RealVal(23)
+goal = Real('fx') < RealVal(17)
 # some constants 
 gT = RealVal(20)
 
