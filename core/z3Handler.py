@@ -177,3 +177,32 @@ def _(const):
         startCond = z3Obj(const.condition.substitution(const.startDict))
         return z3.And(endCond, startCond)
 
+@z3Obj.register(Solution)
+def _(const):
+    subDict = {}
+    for i in range(len(const.endList)):
+        keyIndex = str(const.endList[i]).find('_')
+        keyValue = str(const.endList[i])[0:keyIndex]
+        subDict[keyValue] = const.startList[i]
+    for i in const.ode.values():
+        subvariables = list(i.getVars())
+        for j in range(len(subvariables)):
+            if subvariables[j] in const.ode.keys():
+                if str(const.ode[subvariables[j]]) == str(RealVal(0)):
+                    pass
+                else:
+                    raise z3constODEerror()
+            else:
+                raise z3constODEerror()
+    substitutionExp = {}
+    for i in const.ode.keys():
+        substitutionExp[str(i.id)] = const.ode[i].substitution(subDict)
+    result = []
+    for i in range(len(const.endList)):
+        keyIndex = str(const.endList[i]).find('_')
+        keyValue = str(const.endList[i])[0:keyIndex]
+        result.append(const.endList[i] == substitutionExp[keyValue])
+
+    z3result = [z3Obj(c) for c in result]
+    return z3.And(z3result)
+

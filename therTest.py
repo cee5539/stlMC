@@ -17,7 +17,7 @@ import models.railroadLinear as M9
 import models.twoBatteryLinear as M10
 
 def reportSatisfiable(model, formula, bound, step, timeBound, filename):
-    for k in range(16, bound + 1, step):
+    for k in range(0, bound + 1, step):
         print("  scheduleing " + str(formula) + " bound: " + str(k))
         (result, cSize, fSize, generationTime, solvingTime, totalTime) = model.modelCheck(formula, k, timeBound, False)
         with open(filename, 'a+') as fle:
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     for (model, bound, tmax, step, stlFormulas, reachGoal) in configs:
         model.modelCheck(stlFormulas[0], bound, tmax, False)
-
+   
 
     '''
     # create data directory if needed

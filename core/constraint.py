@@ -301,6 +301,29 @@ class Integral(Node):
     def size(self):
         return 1
 
+class Solution(Node):
+    def __init__(self, endList, startList, index, ode):
+        self.startList = []
+        self.endList = []
+        for i in endList.keys():
+            self.startList.append(startList[i])
+            self.endList.append(endList[i])
+        self.ode = ode
+        self.flowIndex = str(index)
+        super().__init__(Type.Bool)
+    def __repr__(self):
+        start = '[' + ' '.join([str(sl) for sl in self.startList]) + ']'
+        end   = '[' + ' '.join([str(el) for el in self.endList])   + ']'
+        result = '(= ' + end + '\n  (solution flow_' + self.flowIndex + '))\n'
+        return result
+    def getVars(self):
+        return set(self.startList + self.endList)
+    def substitution(self, subDict):
+        return self
+    def nextSub(self, subDict):
+        return self
+    def size(self):
+        return 1
 
 class Forall(Node):
     def __init__(self, flowIndex, time, condition, start, end, mode):
